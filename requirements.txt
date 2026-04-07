@@ -1,0 +1,11 @@
+langchain
+langchain-anthropic
+langchain-openai
+langchain-community
+chromadb
+openai
+anthropic
+streamlit
+pandas
+requests
+python-dotenv

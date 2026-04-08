@@ -76,6 +76,10 @@ def ask(chain, retriever, question: str):
     for doc in docs:
         print(f"  - {doc.metadata.get('source', 'unknown')}")
 
+def ask_policy_question(question: str) -> str:
+    chain, retriever = build_rag_chain()
+    answer = chain.invoke(question)
+    return answer
 
 if __name__ == "__main__":
     chain, retriever = build_rag_chain()

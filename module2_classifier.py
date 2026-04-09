@@ -1,8 +1,9 @@
 # module2_classifier.py
 
-import os
 from dotenv import load_dotenv
 from anthropic import Anthropic
+from module1_rag import ask_policy_question
+from module3_integrations import create_trello_card
 
 load_dotenv()
 client = Anthropic()
@@ -33,26 +34,24 @@ tools = [
 # --- Router: calls the right handler based on category ---
 def route_request(category, original_request):
     if category == "policy_question":
-        print("  → Routing to RAG pipeline (module1)...")
-        from module1_rag import ask_policy_question
         answer = ask_policy_question(original_request)
         print(f"  RAG Answer: {answer}")
+        return answer
 
     elif category == "create_task":
-        print("  → Would create a Trello task (module3 - coming soon)")
-        print(f"  Task: {original_request}")
+        result = create_trello_card(original_request)
+        print(f"  Trello card created: {result['name']}")
+        print(f"  URL: {result['url']}")
+        return result
 
     elif category == "send_notification":
-        print("  → Would send a notification (module3 - coming soon)")
-        print(f"  Message: {original_request}")
+        print(f"  Notification stub: {original_request}")
 
     elif category == "trigger_workflow":
-        print("  → Would trigger n8n workflow (module3 - coming soon)")
-        print(f"  Workflow trigger: {original_request}")
+        print(f"  Workflow stub: {original_request}")
 
     else:
-        print("  → Unknown request type. Logging and skipping.")
-        print(f"  Unhandled: {original_request}")
+        print(f"  Unknown request, logging and skipping: {original_request}")
 
 
 # --- Main classifier function ---
@@ -75,7 +74,6 @@ Request: {request}"""
         ]
     )
 
-    # Extract the tool use block
     for block in response.content:
         if block.type == "tool_use" and block.name == "classify_request":
             category = block.input["category"]
@@ -96,7 +94,7 @@ if __name__ == "__main__":
         "Create a task to review the Henderson account by Friday",
         "Send a notification to the compliance team about the new audit",
         "Trigger the end-of-day reconciliation workflow",
-        "gjkahsdgkjashd",  # unknown/garbage
+        "gjkahsdgkjashd",
     ]
 
     for req in test_requests:

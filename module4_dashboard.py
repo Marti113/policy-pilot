@@ -2,7 +2,7 @@
 
 import streamlit as st
 from module2_classifier import classify_and_route
-from module3_integrations import create_trello_card
+from module3_integrations import create_trello_card, send_slack_notification
 
 st.set_page_config(page_title="PolicyPilot", page_icon="🏦", layout="centered")
 
@@ -54,8 +54,13 @@ if st.button("Submit") and user_input:
         st.write(f"**Trello URL:** {result['url']}")
 
     elif category == "send_notification":
-        st.markdown("### 🔔 Notification")
-        st.info("Notification routing coming soon (Module 3 extension)")
+        st.markdown("### 🔔 Slack Notification Sent")
+        result = send_slack_notification(user_input)
+        if result["ok"]:
+            st.success(f"Message posted to Slack channel")
+            st.write(f"**Message:** {result['message']}")
+        else:
+            st.error("Slack notification failed")
 
     elif category == "trigger_workflow":
         st.markdown("### ⚡ Workflow Triggered")

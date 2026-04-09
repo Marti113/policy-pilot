@@ -45,7 +45,9 @@ def route_request(category, original_request):
         return result
 
     elif category == "send_notification":
-        print(f"  Notification stub: {original_request}")
+        from module3_integrations import send_slack_notification
+        result = send_slack_notification(original_request)
+        print(f"  Slack notification sent: {result['ok']}")
 
     elif category == "trigger_workflow":
         print(f"  Workflow stub: {original_request}")

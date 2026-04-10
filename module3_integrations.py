@@ -20,6 +20,9 @@ SNOW_INSTANCE = os.getenv("SNOW_INSTANCE")
 SNOW_USERNAME = os.getenv("SNOW_USERNAME")
 SNOW_PASSWORD = os.getenv("SNOW_PASSWORD")
 
+# n8n
+N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL")
+
 
 def get_todo_list_id():
     """Get the ID of the 'To Do' list on the board."""
@@ -75,6 +78,19 @@ def send_slack_notification(message: str) -> dict:
         "ok": result["ok"],
         "channel": result.get("channel"),
         "message": message
+    }
+
+
+
+def trigger_n8n_workflow(request: str) -> dict:
+    """Trigger an n8n workflow via webhook."""
+    response = requests.post(
+        N8N_WEBHOOK_URL,
+        json={"request": request}
+    )
+    return {
+        "status": response.status_code,
+        "ok": response.status_code == 200
     }
 
 

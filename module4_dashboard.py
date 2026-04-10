@@ -63,8 +63,14 @@ if st.button("Submit") and user_input:
             st.error("Slack notification failed")
 
     elif category == "trigger_workflow":
-        st.markdown("### ⚡ Workflow Triggered")
-        st.info("Workflow trigger coming soon (Module 3 extension)")
+        from module3_integrations import trigger_n8n_workflow
+        st.markdown("### ⚡ n8n Workflow Triggered")
+        result = trigger_n8n_workflow(user_input)
+        if result["ok"]:
+            st.success("Workflow triggered successfully via n8n")
+            st.write(f"**Request:** {user_input}")
+        else:
+            st.error("Workflow trigger failed")
 
     else:
         st.markdown("### ❓ Unknown Request")

@@ -48,7 +48,9 @@ def route_request(category, original_request):
         print(f"  Notification stub: {original_request}")
 
     elif category == "trigger_workflow":
-        print(f"  Workflow stub: {original_request}")
+        from module3_integrations import trigger_n8n_workflow
+        result = trigger_n8n_workflow(original_request)
+        print(f"  n8n workflow triggered: {result['ok']}")
 
     else:
         print(f"  Unknown request, logging and skipping: {original_request}")
